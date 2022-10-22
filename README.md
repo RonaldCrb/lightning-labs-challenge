@@ -18,7 +18,7 @@ for running this stack you will need a fresh version of:
 ## Steps
 - if your minikube instance is not running, start it now `minikube start` 
 - go to `/SECRETS/bitcoin.conf` and set the RPC password and user name of your choice
-- go to `/SECRETS/lnd.conf` and set the RPC password and user name of your choice
+- go to `/SECRETS/lnd.conf` and match the bitcoind RPC username and Password the same as you used in the step above
 - run `bootstrap.sh`
 - after youre done, just run `cleanup.sh`
 
@@ -33,7 +33,7 @@ for running this stack you will need a fresh version of:
 - gitops advanced challenge
 
 ## known problems
-- depending on your minikube storage configuration, when running `cleanup.sh` and attempting `bootstrap.sh` again, you will find this error... it can be fixed by deleting the lnd volumes inside the minikube host.
+- depending on your minikube storage configuration, when running `cleanup.sh` and attempting `bootstrap.sh` again or when re-running `bootstrap.sh`, you will find this error... it can be fixed by deleting the lnd volumes inside the minikube host. (for me that means just running `docker exec minikube rm -rf /data/lnd-bob /data/lnd-alice` as soon as i get the crashloops on LND workloads); this effectively initializes the node with a new seed and wallet password. if you run `cleanup.sh` the secrets containing the seed and wallet password are going to be deleted, therefore if you want to be safe, make sure that you take note of those before performing any potentially destructive actions.
 
 <img title="invalid passphrase" alt="invalid passphrase" src="./inv-passphrase.png">
 

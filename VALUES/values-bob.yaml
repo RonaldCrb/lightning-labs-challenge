@@ -20,7 +20,7 @@ env:
   - name: WALLET_SECRET_NAMESPACE
     value: base-challenge
   - name: UPLOAD_RPC_SECRETS
-    value: '1'
+    value: "1"
   - name: RPC_SECRETS_NAME
     value: lnd-bob-rpc-credentials
   - name: RPC_SECRET_NAMESPACE

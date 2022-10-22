@@ -1,0 +1,18 @@
+command:
+  enabled: true
+  cmd: ["bitcoind"]
+  args: [
+    "-conf=/home/bitcoin/bitcoin.conf"
+  ]
+
+# override config secret name
+config: bitcoind-conf
+
+# override data persistency
+dataPersistency:
+  enabled: true
+  capacity: "100Mi"
+  storageClass: bitcoind-data
+  providerPvConfig:
+    hostPath:
+      path: /data/bitcoind # needs to be a subdirectory of /data/* -> https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/#a-note-on-mounts-persistence-and-minikube-hosts

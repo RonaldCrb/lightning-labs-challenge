@@ -1,0 +1,43 @@
+image:
+  name: "ronaldcrb/lndinit"
+  tag: "test"
+  pullPolicy: "Always"
+
+command:
+  cmd: [ '/init-wallet.sh' ]
+  args: [
+    "--configfile=/home/lnd/config/lnd.conf",
+    '--wallet-unlock-password-file=/tmp/wallet-password'
+  ]
+
+securityContext:
+  enabled: false # this is documented in the `known issues` section of the readme
+
+walletPasswordSecret: lnd-alice-wallet-credentials
+
+env:
+  - name: WALLET_PASSWORD_FILE
+    value: /tmp/wallet-password
+  - name: WALLET_SECRET_NAME
+    value: lnd-alice-wallet-credentials
+  - name: WALLET_SECRET_NAMESPACE
+    value: base-challenge
+  - name: UPLOAD_RPC_SECRETS
+    value: '1'
+  - name: RPC_SECRETS_NAMESPACE 
+    value: "base-challenge"
+  - name: RPC_SECRETS_NAME
+    value: lnd-alice-rpc-credentials
+  - name: WALLET_DIR
+    value: /root/.lnd/data/chain/bitcoin/regtest
+  - name: CERT_DIR
+    value: /root/.lnd
+
+
+dataPersistency:
+  enabled: true
+  capacity: "100Mi"
+  storageClass: lnd-alice-data
+  providerPvConfig:
+    hostPath:
+      path: /data/lnd-alice/ # needs to be a subdirectory of /data/* -> https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/#a-note-on-mounts-persistence-and-minikube-hosts

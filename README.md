@@ -24,7 +24,7 @@ for running this stack you will need a fresh version of:
 
 
 ## In Progress
-- fixing lndinit config such that it stores the RPC passwords as k8s secrets.
+- fixing lndinit config such that it stores the TLS certificate and macaroons to k8s secrets.
 - creating the program that performs the following actions:
   - generate alice new on-chain address
   - mine few blocks using alice address to receive mining rewards

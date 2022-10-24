@@ -97,10 +97,6 @@ spec:
               mountPath: "/home/lnd/config"
               readOnly: true
             
-            - name: wallet-password
-              mountPath: "/home/lnd/credentials"
-              readOnly: false
-
       volumes:
       {{- if .Values.dataPersistency.enabled }}
         - name: {{ include "lnd.persistenVolumeName" . }}
@@ -111,10 +107,7 @@ spec:
           secret:
             secretName: {{ .Values.config }}
             optional: false
-        - name: wallet-password
-          secret:
-            secretName: {{ .Values.walletPasswordSecret }}
-            optional: false
+
 
       # necessary for preventing the scheduling of pods in nodes that dont have enough storage
       {{- if .Values.nodeSelectorEnabled }}

@@ -31,7 +31,6 @@ you can use the `block-generator.sh` script in order to mine 1 block every 10 se
 - gitops advanced challenge
 
 ## known problems
-
 - by switching `securityContext.enabled` in the `lnd` chart, the `lndinit` process panics with a nil pointer deref
 
 <img title="Memory Sege" alt="Alt text" src="./panic-nil-pointer.png">

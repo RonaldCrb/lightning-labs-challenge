@@ -33,11 +33,15 @@ for running this stack you will need a fresh version of:
 - gitops advanced challenge
 
 ## known problems
-- depending on your minikube storage configuration, when running `cleanup.sh` and attempting `bootstrap.sh` again or when re-running `bootstrap.sh`, you will find this error... it can be fixed by deleting the lnd volumes inside the minikube host. (for me that means just running `docker exec minikube rm -rf /data/lnd-bob /data/lnd-alice` as soon as i get the crashloops on LND workloads); this effectively initializes the node with a new seed and wallet password. if you run `cleanup.sh` the secrets containing the seed and wallet password are going to be deleted, therefore if you want to be safe, make sure that you take note of those before performing any potentially destructive actions.
-
-<img title="invalid passphrase" alt="invalid passphrase" src="./inv-passphrase.png">
 
 
 - by switching `securityContext.enabled` in the `lnd` chart, the `lndinit` process panics with a nil pointer deref
 
 <img title="Memory Sege" alt="Alt text" src="./panic-nil-pointer.png">
+
+## fixed problems
+- The solution for this was to delete the secret template from the lnd chart and allow the lndinit process to control the secrets for wallet credentials; for this to work we also need to add the `create` verb to the `Role` template such that the lndinit process is authorized to create new secrets in k8s. 
+
+~~depending on your minikube storage configuration, when running `cleanup.sh` and attempting `bootstrap.sh` again or when re-running `bootstrap.sh`, you will find this error... it can be fixed by deleting the lnd volumes inside the minikube host. (for me that means just running `docker exec minikube rm -rf /data/lnd-bob /data/lnd-alice` as soon as i get the crashloops on LND workloads); this effectively initializes the node with a new seed and wallet password. if you run `cleanup.sh` the secrets containing the seed and wallet password are going to be deleted, therefore if you want to be safe, make sure that you take note of those before performing any potentially destructive actions.~~
+
+<img title="invalid passphrase" alt="invalid passphrase" src="./inv-passphrase.png">

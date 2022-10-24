@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: lnd-appset
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - environment: regtest1
+        url: https://kubernetes.default.svc
+      - environment: regtest2
+        url: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: 'lnd-{{environment}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/RonaldCrb/lightning-labs-challenge.git
+        targetRevision: HEAD
+        path: apps/lnd
+        helm:
+          valueFiles:
+          - env/{{environment}}/values.yaml
+      destination:
+        server: '{{url}}'
+        namespace: '{{environment}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: false
+        syncOptions:
+          - CreateNamespace=true

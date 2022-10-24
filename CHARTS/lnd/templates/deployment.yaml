@@ -107,10 +107,19 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "lnd.persistenVolumeName" . }}
       {{- end }}
+
+
+      {{- if not .Values.configSecret "" }}
         - name: lnd-conf
           secret:
-            secretName: {{ .Values.config }}
+            secretName: {{ .Values.configSecret }}
             optional: false
+      {{- else if not .Values.configFile "" }}
+        - name: bitcoin-conf
+          configMap:
+            name: {{ include "bitcoind.fullname" . }}
+      {{- end }}
+      
         - name: wallet-password
           secret:
             secretName: {{ .Values.walletPasswordSecret }}

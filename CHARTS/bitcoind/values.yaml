@@ -121,7 +121,9 @@ readinessProbe:
   failureThreshold: 5
   successThreshold: 1
 
-configSecret: bitcoind-conf
+configSecret: ""
+configFile: ""
+
 dataPersistency:
   enabled: false
   storageClass: bitcoin-data

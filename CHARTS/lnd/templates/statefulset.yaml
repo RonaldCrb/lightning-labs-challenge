@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "lnd.fullname" . }}
   namespace: {{ .Values.namespace }}
@@ -7,8 +7,9 @@ metadata:
     {{- include "lnd.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  strategy:
-    type: Recreate
+  # service name for statefulset
+  serviceName: {{ include "lnd.fullname" . }}
+  
   selector:
     matchLabels:
       {{- include "lnd.selectorLabels" . | nindent 6 }}
@@ -97,33 +98,17 @@ spec:
               mountPath: "/home/lnd/config"
               readOnly: true
             
-            - name: wallet-password
-              mountPath: "/home/lnd/credentials"
-              readOnly: false
-
       volumes:
       {{- if .Values.dataPersistency.enabled }}
         - name: {{ include "lnd.persistenVolumeName" . }}
           persistentVolumeClaim:
             claimName: {{ include "lnd.persistenVolumeName" . }}
       {{- end }}
-
-
-      {{- if not .Values.configSecret "" }}
-        - name: lnd-conf
-          secret:
-            secretName: {{ .Values.configSecret }}
-            optional: false
       {{- else if not .Values.configFile "" }}
         - name: bitcoin-conf
           configMap:
             name: {{ include "bitcoind.fullname" . }}
       {{- end }}
-      
-        - name: wallet-password
-          secret:
-            secretName: {{ .Values.walletPasswordSecret }}
-            optional: false
 
       # necessary for preventing the scheduling of pods in nodes that dont have enough storage
       {{- if .Values.nodeSelectorEnabled }}

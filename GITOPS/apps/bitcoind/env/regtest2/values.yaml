@@ -1,0 +1,37 @@
+# override the values in this file as per your requirement
+bitcoind:
+  enabled: true
+  command:
+    enabled: true
+    cmd: ["bitcoind"]
+    args: [
+      "-conf=/home/bitcoin/bitcoin.conf"
+    ]
+
+  # override config secret name
+  config: bitcoind-conf
+  configfile: |-
+    # OVERRIDE THESE SECRETS
+    rpcuser=satoshi
+    rpcpassword=changeme
+    
+    # LEAVE THESE ALONE
+    regtest=1
+    txindex=1
+    server=1
+    blockfilterindex=1
+    zmqpubrawblock=tcp://0.0.0.0:28332
+    zmqpubrawtx=tcp://0.0.0.0:28333
+    rpcallowip=0.0.0.0/0
+    
+    [regtest]
+    rpcbind=0.0.0.0
+    rpcport=18444
+  # override data persistency
+  dataPersistency:
+    enabled: true
+    capacity: "100Mi"
+    storageClass: bitcoind-data
+    providerPvConfig:
+      hostPath:
+        path: /data/bitcoind # needs to be a subdirectory of /data/* -> https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/#a-note-on-mounts-persistence-and-minikube-hosts

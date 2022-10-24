@@ -104,11 +104,11 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "lnd.persistenVolumeName" . }}
       {{- end }}
-        - name: lnd-conf
-          secret:
-            secretName: {{ .Values.config }}
-            optional: false
-
+      {{- else if not .Values.configFile "" }}
+        - name: bitcoin-conf
+          configMap:
+            name: {{ include "bitcoind.fullname" . }}
+      {{- end }}
 
       # necessary for preventing the scheduling of pods in nodes that dont have enough storage
       {{- if .Values.nodeSelectorEnabled }}

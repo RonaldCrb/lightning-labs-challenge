@@ -60,7 +60,9 @@ command:
   ]
 
 # name of the k8s secret containing the lnd.conf file
-config: lnd-conf
+configSecret: ""
+# literal configuration writtenn as yaml multiline |-
+configFile: ""
 
 # name of the secret managed by lndinit where wallet credentials are allocated
 walletPasswordSecret: placeholder

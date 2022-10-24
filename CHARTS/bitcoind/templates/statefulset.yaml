@@ -89,23 +89,15 @@ spec:
               readOnly: true
 
       volumes:
-      
+
       {{- if .Values.dataPersistency.enabled }}
         - name: {{ include "bitcoind.persistenVolumeName" . }}
           persistentVolumeClaim:
             claimName: {{ include "bitcoind.persistenVolumeName" . }}
       {{- end }}
-
-      {{- if not .Values.configSecret "" }}
-        - name: bitcoin-conf
-          secret:
-            secretName: {{ .Values.configSecret }}
-            optional: false
-      {{- else if not .Values.configFile "" }}
         - name: bitcoin-conf
           configMap:
-            name: {{ include "bitcoind.fullname" . }}
-      {{- end }}
+            name: {{ template "bitcoind.fullname" . }}
       
       # necessary for preventing the scheduling of pods in nodes that dont have enough storage
       {{- if .Values.nodeSelectorEnabled }}

@@ -6,7 +6,24 @@ command:
   ]
 
 # override config secret name
-config: bitcoind-conf
+configFile:
+  bitcoin.conf: |-
+    # OVERRIDE THESE SECRETS
+    rpcuser=satoshi
+    rpcpassword=changeme
+    
+    # LEAVE THESE ALONE
+    regtest=1
+    txindex=1
+    server=1
+    blockfilterindex=1
+    zmqpubrawblock=tcp://0.0.0.0:28332
+    zmqpubrawtx=tcp://0.0.0.0:28333
+    rpcallowip=0.0.0.0/0
+    
+    [regtest]
+    rpcbind=0.0.0.0
+    rpcport=18444
 
 # override data persistency
 dataPersistency:

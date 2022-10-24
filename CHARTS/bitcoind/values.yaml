@@ -121,8 +121,10 @@ readinessProbe:
   failureThreshold: 5
   successThreshold: 1
 
-configSecret: ""
-configFile: ""
+configfile:
+  bitcoin.conf: |-
+    # rpcuser=rpcuser
+    # rpcpassword=rpcpassword
 
 dataPersistency:
   enabled: false

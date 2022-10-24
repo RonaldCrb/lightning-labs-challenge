@@ -9,8 +9,8 @@ kubectl exec pod/bitcoind-0 -- bitcoin-cli -$NETWORK -rpcpassword=$RPC_PASS -rpc
 echo '=> Getting new address from lnd-alice'
 ALICE_ADDRESS=$(kubectl exec pod/lnd-alice-0 -- lncli --network=$NETWORK newaddress p2wkh | jq -r '.address')
 
-echo "=> mining the first 6 blocks to alice address -> $ALICE_ADDRESS"
-kubectl exec pod/bitcoind-0 -- bitcoin-cli -$NETWORK -rpcpassword=$RPC_PASS -rpcuser=$RPC_USER -rpcport=18444 generatetoaddress 6 "$ALICE_ADDRESS"
+echo "=> mining the first 20 blocks to alice address -> $ALICE_ADDRESS"
+kubectl exec pod/bitcoind-0 -- bitcoin-cli -$NETWORK -rpcpassword=$RPC_PASS -rpcuser=$RPC_USER -rpcport=18444 generatetoaddress 20 "$ALICE_ADDRESS"
 
 echo '=> getting new bitcoind address'
 BITCOIND_ADDRESS=$(kubectl exec pod/bitcoind-0 -- bitcoin-cli -$NETWORK -rpcpassword=$RPC_PASS -rpcuser=$RPC_USER -rpcport=18444 getnewaddress)
@@ -35,6 +35,8 @@ while [[ "$ALICE_STATUS" != "SERVER_ACTIVE" && "$BOB_STATUS" != "SERVER_ACTIVE" 
   ALICE_STATUS=$(kubectl exec pod/lnd-alice-0 -- lncli state | jq -r '.state')
   BOB_STATUS=$(kubectl exec pod/lnd-bob-0 -- lncli state | jq -r '.state')
 done
+
+sleep 5
 
 echo "=> Connecting to lnd-bob from lnd-alice"
 kubectl exec pod/lnd-alice-0 -- lncli --network=$NETWORK connect $BOB_PUBLIC_KEY@lnd-bob.base-challenge.svc.cluster.local

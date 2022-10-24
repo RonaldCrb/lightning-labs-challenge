@@ -20,21 +20,17 @@ for running this stack you will need a fresh version of:
 - go to `/SECRETS/bitcoin.conf` and set the RPC password and user name of your choice
 - go to `/SECRETS/lnd.conf` and match the bitcoind RPC username and Password the same as you used in the step above
 - run `bootstrap.sh`
+- run `setup.sh` to bootstrap the network. the end result of this script should be the payment confirmations sending some sats lnd-alice <-> lnd-bob 
 - after youre done, just run `cleanup.sh`
+- if youre really done, you can delete the nodes data with `docker exec minikube rm -rf /data/bitcoind /data/lnd-alice /data/lnd-bob`
 
+## optional
+you can use the `block-generator.sh` script in order to mine 1 block every 10 seconds. (dont forget to update RPC user and password at the top)
 
 ## In Progress
-- fixing lndinit config such that it stores the TLS certificate and macaroons to k8s secrets.
-- creating the program that performs the following actions:
-  - generate alice new on-chain address
-  - mine few blocks using alice address to receive mining rewards
-  - use mining rewards to open channels to bob
-  - make some payments thru said channels to bob and back to alice
 - gitops advanced challenge
 
 ## known problems
-
-
 - by switching `securityContext.enabled` in the `lnd` chart, the `lndinit` process panics with a nil pointer deref
 
 <img title="Memory Sege" alt="Alt text" src="./panic-nil-pointer.png">
